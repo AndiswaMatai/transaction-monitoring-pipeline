@@ -1,0 +1,2 @@
+# Pure standard library (json, sqlite3, uuid, unittest) — no third-party
+# dependencies needed to run this project.
