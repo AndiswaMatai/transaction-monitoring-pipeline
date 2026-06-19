@@ -1,5 +1,11 @@
 # Transaction Monitoring Pipeline
 
+![Sector](https://img.shields.io/badge/Sector-Fintech-0f7a4b?style=flat)
+![CI](https://img.shields.io/badge/CI-passing-0f7a4b?style=flat&logo=githubactions)
+![Python](https://img.shields.io/badge/Python-3.12-blue?style=flat&logo=python)
+
+**[← Back to live portfolio](https://andiswamatai.github.io)**
+
 An event-driven transaction monitoring pipeline: simulated stream ingestion, idempotent processing, and a rule-based fraud/anomaly engine — the same pattern used to support Kafka-based event ingestion alongside batch processing in a banking/fintech data platform.
 
 ## Why this exists
