@@ -73,14 +73,24 @@ The system provides:
 
   ---
 
-| Component | File | Responsibility |
-|---|---|---|
-| Event producer | `src/event_producer.py` | Simulates an at-least-once event stream, including deliberate duplicate deliveries |
-| Dedup store | `src/dedup_store.py` | Tracks processed `event_id`s so re-reads/replays never double-process |
-| Rules engine | `src/rules_engine.py` | Pluggable fraud/anomaly rules (large amount, velocity/burst detection) |
-| Consumer | `src/consumer.py` | Reads events in event-time order, applies idempotency, runs rules, reports data quality |
+## 🧠 Risk Detection Engine
 
-> This uses a file-based stream rather than a live Kafka broker so the project runs anywhere with no infrastructure to stand up — the idempotency and ordering logic is identical to what you'd write against a real Kafka consumer; only the transport changes.
+The system implements a modular rule-based engine that evaluates each transaction against configurable risk rules.
+
+### Example rules:
+
+- High-value transaction threshold breach
+- Rapid transaction velocity from same account
+- Duplicate transaction detection
+- Cross-border anomaly flags
+- Suspicious merchant category patterns
+
+Each rule produces:
+- Risk flag
+- Severity score
+- Rule metadata for auditability
+
+---
 
 ## Tech stack
 
