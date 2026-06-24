@@ -96,95 +96,28 @@ Each rule produces:
 
 Python, SQLite, JSON Lines (the file format that maps directly onto how Kafka messages are typically logged/replayed).
 
-## Running it
+## ⚙️ Data Engineering Patterns
 
-```bash
-python src/event_producer.py   # generates data/events.jsonl, ~500 events incl. duplicates
-python src/consumer.py
+This platform demonstrates enterprise data engineering concepts:
+
+- Idempotent ingestion using deterministic transaction keys
+- Event deduplication to prevent double processing
+- Stateless rule evaluation for scalability
+- Spark-style distributed transformation design
+- Separation of ingestion, processing, and risk scoring layers
+
+## 📊 Outputs
+
+The system produces structured outputs for downstream consumption:
+
+- Clean transaction stream
+- Risk-scored transaction dataset
+- Fraud alerts dataset
+- Rule evaluation logs
+- Monitoring-ready tables for BI tools
 ```
 
-Sample output:
 
-```
-Events read:          515
-Duplicates skipped:   15
-Net events processed: 500
-Completeness:         100.00%
-Alerts raised:        39
-   VELOCITY: 18
-   LARGE_AMOUNT: 21
-```
-
-Run the tests:
-
-```bash
-python -m unittest discover -s tests -v
-```
-
-## Production Architecture
-
-This repo now ships the full event-driven production footprint: Event Hubs (Kafka-compatible), an Azure Function running the consumer/rules engine, Cosmos DB as the distributed idempotency store, and monitoring + cost controls — provisioned via Terraform.
-
-```mermaid
-flowchart LR
-    subgraph Producers["Event Producers"]
-        POS[("POS / Payment\nTerminals")]
-    end
-
-    subgraph EH["Event Hubs\n(Kafka-compatible)"]
-        Topic["eh-transaction-events\n4 partitions"]
-    end
-
-    subgraph Function["Azure Function\n(Consumption plan)"]
-        Consumer["consumer.py logic"]
-        Rules["rules_engine.py logic\nLARGE_AMOUNT / VELOCITY"]
-    end
-
-    subgraph Cosmos["Cosmos DB"]
-        Dedup[("processed_events\npartition: /event_id\nautoscale RU/s")]
-    end
-
-    subgraph Ops["Platform Operations"]
-        Monitor["Azure Monitor\nconsumer lag, failures,\nthrottling, alert volume"]
-        Cost["Cost Optimization\nConsumption + autoscale"]
-    end
-
-    POS -->|Kafka protocol| Topic --> Consumer
-    Consumer -->|is_new?| Dedup
-    Consumer --> Rules
-    Rules -->|alerts| Function
-    Monitor -.watches.-> Function
-    Monitor -.watches.-> Topic
-    Monitor -.watches.-> Cosmos
-```
-
-## What's actually runnable vs. what's reference architecture
-
-| Component | Status |
-|---|---|
-| `src/*.py` — producer, dedup store, rules engine, consumer | **Runs locally**, no Azure account needed |
-| `tests/` | **Runs locally**, 6 passing unit tests |
-| `cost_optimization/cost_calculator.py` | **Runs locally**, models real savings (~R283K/year) |
-| `terraform/*.tf` | **Valid HCL**, `terraform validate`-able, not applied (no Azure subscription) |
-| `monitoring/alert_rules.tf` | **Valid HCL**, 4 alert tiers tuned for a fraud-detection workload |
-| `.github/workflows/cd.yml` | **Documents the real deployment commands**, doesn't execute against live infra |
-
-## Production readiness checklist
-
-- [x] Infrastructure as Code (Terraform, environment-separated via `.tfvars`)
-- [x] CI/CD (GitHub Actions: test → Terraform plan → deploy)
-- [x] Event-driven, Kafka-compatible ingestion (Event Hubs) — real producers need zero code changes
-- [x] Distributed idempotency store (Cosmos DB) — the local SQLite store doesn't work across concurrent Function instances, Cosmos does
-- [x] Monitoring & alerting (4 tiers: consumer lag, function failures, Cosmos throttling, alert-volume anomaly)
-- [x] Cost optimization (Functions Consumption plan, Cosmos + Event Hubs autoscale — all measured, ~84% savings vs always-on sizing)
-- [x] Secrets via Key Vault, Function App uses managed identity for Cosmos access
-- [x] Least-privilege Event Hub authorization rule (listen-only for the consumer)
-
-## What I'd add next
-
-- Swap the file-based local producer for `confluent-kafka-python` pointed at the real Event Hubs Kafka endpoint, keeping `dedup_store.py` and `rules_engine.py` unchanged.
-- Stream alerts to a case-management queue (Service Bus) instead of a flat file, with severity scoring and analyst feedback loops.
-- Add the Cosmos DB Data Contributor role assignment noted in `terraform/cosmos_and_function.tf` once deployed against a live subscription.
 
 ## License
 
