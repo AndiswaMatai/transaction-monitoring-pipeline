@@ -1,4 +1,4 @@
-# Transaction Monitoring Pipeline
+# Real-Time Transaction Monitoring & Risk Detection Platform
 
 ![Sector](https://img.shields.io/badge/Sector-Fintech-0f7a4b?style=flat)
 ![CI](https://img.shields.io/badge/CI-passing-0f7a4b?style=flat&logo=githubactions)
