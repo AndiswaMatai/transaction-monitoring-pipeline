@@ -38,14 +38,40 @@ The system provides:
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    A[Event Producer\n(simulated stream)] -->|events.jsonl| B[Consumer]
-    B -->|is_new?| C[(Dedup Store\nSQLite)]
-    B --> D[Rules Engine]
-    D -->|LARGE_AMOUNT, VELOCITY| E[alerts.jsonl]
-    B --> F[Data Quality:\ncompleteness, dedup rate]
-```
+📡 Transaction Sources
+- Payment Gateway Events
+- Banking Transactions
+- Card Swipes / Digital Payments
+
+        ↓
+
+⚡ Ingestion Layer
+- Event Stream Capture (Kafka-style simulation)
+- Deduplication (idempotency key logic)
+
+        ↓
+
+🔄 Processing Layer
+- Spark-style transformations
+- Transaction enrichment
+- Rule engine evaluation
+
+        ↓
+
+🧠 Risk Engine
+- Fraud rules engine (pluggable)
+- Velocity checks
+- Threshold anomalies
+- Behavioural flags
+
+        ↓
+
+📊 Output Layer
+- Alerts dataset
+- Risk scored transactions
+- Monitoring dashboards (Power BI / logs)
+
+  ---
 
 | Component | File | Responsibility |
 |---|---|---|
