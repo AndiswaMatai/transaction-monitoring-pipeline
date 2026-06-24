@@ -6,11 +6,19 @@
 
 **[← Back to live portfolio](https://andiswamatai.github.io)**
 
-An event-driven transaction monitoring pipeline: simulated stream ingestion, idempotent processing, and a rule-based fraud/anomaly engine — the same pattern used to support Kafka-based event ingestion alongside batch processing in a banking/fintech data platform.
+## 🧠 Business Context
 
-## Why this exists
+Financial institutions process millions of transactions daily across multiple channels including cards, EFT, digital banking, and cross-border payments.
 
-Payment events arrive at-least-once, out of order, and sometimes twice. A monitoring system that double-counts a duplicate delivery either double-fires an alert or misses a real fraud pattern. This project implements the idempotency and ordering guarantees that make event-driven monitoring trustworthy, then layers a small rules engine on top to demonstrate the kind of anomaly detection those guarantees exist to support.
+In such environments, ensuring transactional integrity and detecting fraudulent or suspicious activity in near real-time is critical.
+
+Key challenges include:
+
+- High-velocity transaction streams from multiple sources
+- Duplicate or replayed events due to network retries
+- Lack of consistent transaction identity across systems
+- Increasing sophistication of fraud patterns
+- Regulatory pressure for real-time monitoring and reporting
 
 ## Architecture
 
