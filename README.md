@@ -20,6 +20,22 @@ Key challenges include:
 - Increasing sophistication of fraud patterns
 - Regulatory pressure for real-time monitoring and reporting
 
+  ---
+  
+## 🎯 Solution Overview
+
+This platform implements a real-time transaction monitoring and risk detection system designed to simulate enterprise-grade financial crime monitoring architecture.
+
+The system provides:
+
+- Event-driven ingestion layer for transaction streams
+- Idempotency controls to eliminate duplicate transactions
+- Pluggable rule-based risk detection engine
+- Structured enrichment of transaction events
+- Monitoring-ready outputs for downstream analytics and alerting systems
+  
+---
+
 ## Architecture
 
 ```mermaid
