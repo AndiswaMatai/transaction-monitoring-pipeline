@@ -1,0 +1,7 @@
+// config/risk_rules.json
+{
+  "high_value_threshold": 10000,
+  "velocity_limit": 5,
+  "duplicate_check": true,
+  "cross_border_flag": true
+}
