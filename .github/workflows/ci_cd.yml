@@ -1,0 +1,14 @@
+# infrastructure/ci-cd.yml
+name: Transaction Monitoring CI/CD
+
+on: [push]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run PySpark tests
+        run: pytest tests/
+      - name: Deploy Databricks Job
+        run: databricks jobs create --json-file databricks/job.json
