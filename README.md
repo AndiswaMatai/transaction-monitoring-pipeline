@@ -94,6 +94,7 @@ Each rule produces: **Risk flag · Severity score · Rule metadata for auditabil
 ---
 
 ## 📂 Project Structure
+```
 transaction-monitoring-platform/
 ├── src/                # Core Python modules for ingestion, processing, risk engine
 ├── config/             # Config files (risk rules, thresholds, environment variables)
@@ -104,7 +105,7 @@ transaction-monitoring-platform/
 ├── infrastructure/     # Terraform / CI/CD pipeline definitions
 ├── Dockerfile          # Containerisation for deployment
 └── README.md           # Documentation
-
+```
 ---
 
 ## 💡 Business Impact
